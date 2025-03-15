@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yuliano <yuliano@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ypacileo <ypacileo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 13:42:11 by yuliano           #+#    #+#             */
-/*   Updated: 2025/03/11 20:32:58 by yuliano          ###   ########.fr       */
+/*   Updated: 2025/03/15 18:18:40 by ypacileo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,41 @@ int	check_wall_row(t_map *map, int len)
 		i++;
 	}
 	return (1);
+}
+
+// Contar coleccionables en el mapa
+int	count_collectibles(t_map *map)
+{
+	int		count;
+	int		height;
+	size_t	width;
+	int		i;
+	int		j;
+
+	height = map -> count;
+	width = ft_strlen(map -> map[0]);
+	count = 0;
+	i = 0;
+	while (i < height)
+	{
+		j = 0;
+		while (j < (int)width)
+		{
+			if (map -> map[i][j] == 'C')
+				count++;
+			j++;
+		}
+		i++;
+	}
+	return (count);
+}
+// Función para liberar mao_visit
+void	ft_free_copy_map(char **map_visi, int i)
+{
+	while (i >= 0)
+	{
+		free(map_visi[i]);
+		i--;
+	}
+	free(map_visi);
 }

@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   so_long.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yuliano <yuliano@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ypacileo <ypacileo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 06:05:32 by yuliano           #+#    #+#             */
-/*   Updated: 2025/03/11 07:02:44 by yuliano          ###   ########.fr       */
+/*   Updated: 2025/03/15 20:01:15 by ypacileo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SO_LONG_H
 # define SO_LONG_H
 
-
+#include "libft.h"
 #include "get_next_line.h"
-
+#include <mlx.h>
 # include <stdlib.h>
 # include <string.h>
 # include <stdio.h>
@@ -28,6 +28,31 @@ typedef struct s_map
     char **map;
     int count;
 }   t_map;
+
+// Estructura para coordenadas
+typedef struct s_point
+{
+    int x;
+    int y;
+} t_point;
+
+// Cola para BFS
+typedef struct s_queue
+{
+    t_point *points;
+    int frente;
+    int final;
+    int size;
+} t_queue;
+
+typedef struct s_data
+{
+    int colec;
+    int exit;
+    char **copy;
+} t_data;
+
+
 
 void	counter_row(t_map *map, char *line, int fd);
 void	free_trash(char *line, int fd);
@@ -42,4 +67,17 @@ int	check_wall(t_map *map);
 int	character_validation(t_map *map, char c);
 int	collectible_validation(t_map *map, char c);
 void map_validation(t_map **map, int argc, char **argv);
+int	count_collectibles(t_map *map);
+void	ft_free_copy_map(char **map_visi, int i);
+void	liberar_bfs(char ***map_visited, t_queue **cola, int alto);
+void	init_directions(int dir[4][2]);
+char	*init_map_row(char *source, size_t width);
+char	**map_visi(t_map *map);
+t_queue	*init_cola(int size);
+void	anadir_cola(t_queue *q, t_point pos);
+t_point	extraer_cola(t_queue *q);
+t_point	search_player(t_map *map);
+int	init_bfs(t_queue **q, t_data *data, t_map *map, t_point posi);
+void	neighbors_bfs(t_queue *q, t_point pto, t_map *map, t_data *dat);
+int	validate_path_bfs(t_map *map, t_point start_player);
 #endif

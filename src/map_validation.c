@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_validation.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yuliano <yuliano@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ypacileo <ypacileo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 15:56:55 by yuliano           #+#    #+#             */
-/*   Updated: 2025/03/09 19:06:06 by yuliano          ###   ########.fr       */
+/*   Updated: 2025/03/15 18:09:56 by ypacileo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,6 @@ void	map_validation(t_map **map, int argc, char **argv)
 		map_error(map, "Error\nEl mapa debe tener una salida\n");
 	if (collectible_validation(*map, 'C') == 0)
 		map_error(map, "Error\nEl mapa debe tener al menos un coleccionable\n");
+	if (validate_path_bfs(*map, search_player(*map)) == 0)
+		map_error(map, "Error\nRuta no valida");
 }
