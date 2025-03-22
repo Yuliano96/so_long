@@ -3,269 +3,101 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yuliano <yuliano@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ypacileo <ypacileo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 17:37:39 by yuliano           #+#    #+#             */
-/*   Updated: 2025/03/20 22:05:51 by yuliano          ###   ########.fr       */
+/*   Updated: 2025/03/22 21:11:59 by ypacileo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-typedef struct s_img 
+void move_player(t_game *game, int dx, int dy)
 {
-    void	*player;
-    void    *collec;
-    void    *wall;
-    void    *path;
-    void    *ext;
-    int		width;
-    int		height;
-    t_point	pos;
-} t_img;
+    t_point player = obj_posit(game->map, 'P');
+    char next_cell = game->map->map[player.y + dy][player.x + dx]; //posicion del player donde se va a mover
 
-typedef struct s_win
-{
-    void	*mlx;
-    void	*win;
-    int		width;
-    int		height;
-    t_point	pos;
-} t_win;
-
-int close_window(t_win *win)
-{
-    mlx_destroy_window(win->mlx, win->win);
-    exit(0);
-}
-void upload_img(t_img *img, t_win *win)
-{
-    img->player = mlx_xpm_file_to_image(win->mlx, "img/pirata.xpm", &img->width, &img->height);
-    if (!img->player)
-        close_window(win);
-    img->ext = mlx_xpm_file_to_image(win->mlx, "img/tesoro.xpm", &img->width, &img->height);
-    if (!img->ext)
-        close_window(win);
-    img->collec = mlx_xpm_file_to_image(win->mlx, "img/coleccionable.xpm", &img->width, &img->height);
-	if (!img->collec)
-		close_window(win);
-    img->wall = mlx_xpm_file_to_image(win->mlx, "img/muro1.xpm", &img->width, &img->height);
-	if (!img->wall)
-		close_window(win);
-    img->path = mlx_xpm_file_to_image(win->mlx, "img/fondo1.xpm", &img->width, &img->height);
-	if (!img->path)
-		close_window(win);
-}
-
-void	draw_player(t_map *map, t_win *win, t_img *img)
-{
-	img->pos = obj_posit(map, 'P');
-	 mlx_put_image_to_window(win->mlx, win->win, img->player, img->pos.x * 64, img->pos.y * 64);
-}
-
-void	draw_exit(t_map *map, t_win *win, t_img *img)
-{
-	img->pos = obj_posit(map, 'E');
-	mlx_put_image_to_window(win->mlx, win->win, img->ext, img->pos.x * 64, img->pos.y * 64);
-}
-
-void	draw_wall(t_map *map, t_win *win, t_img *img)
-{
-	t_point obj;
-    
-    obj.y = 0;
-    while (obj.y < map->height)
+    if (next_cell != '1') // No moverse a una pared
     {
-        obj.x = 0;
-        while (obj.x < map->width)
-        {
-            
-            if (map->map[obj.y][obj.x] == '1')
-            {
-                img->pos.y = obj.y;
-                img->pos.x = obj.x;
-                mlx_put_image_to_window(win->mlx, win->win, img->wall, img->pos.x * 64, img->pos.y * 64);
-            }
+        if (game->on_exit)
+            game->map->map[player.y][player.x] = 'E'; // Si el jugador estaba sobre 'E' (condicion especial)
+        else
+            game->map->map[player.y][player.x] = '0'; // Dejar suelo normal
 
-            obj.x++;
-        }
-        obj.y++;
+        if (next_cell == 'C')
+            game->cont++;
+
+        if (next_cell == 'E' && game->cont == game->collec)
+            close_window(game);
+
+        if (next_cell == 'E') // si pisamos next_cell
+			game->on_exit = 1;
+		else
+			game->on_exit = 0;
+        game->map->map[player.y + dy][player.x + dx] = 'P'; //pisamos la  nueva posicion (next_cell)
+
+        printf("Movimiento: (%d, %d)\n", dx, dy);
     }
 }
-
-    
-void	draw_collec(t_map *map, t_win *win, t_img *img)
+int mover_player(int key, t_game *game)
 {
-	t_point obj;
-
-    obj.y = 0;
-    while (obj.y < map->height)
-    {
-        obj.x = 0;
-        while (obj.x < map->width)
-        {
-            
-            if (map->map[obj.y][obj.x] == 'C')
-            {
-                img->pos.y = obj.y;
-                img->pos.x = obj.x;
-                mlx_put_image_to_window(win->mlx, win->win, img->collec, img->pos.x * 64, img->pos.y * 64);
-            }
-
-            obj.x++;
-        }
-        obj.y++;
-    }
-}
-
-void draw_path(t_map *map, t_win *win, t_img *img)
-{
-	t_point obj;
-    
-    obj.y = 0;
-    while (obj.y < map->height)
-    {
-        obj.x = 0;
-        while (obj.x < map->width)
-        {
-            
-            if (map->map[obj.y][obj.x] == '0')
-            {
-                img->pos.y = obj.y;
-                img->pos.x = obj.x;
-                mlx_put_image_to_window(win->mlx, win->win, img->path, img->pos.x * 64, img->pos.y * 64);
-            }
-
-            obj.x++;
-        }
-        obj.y++;
-    }
+    if (key == D || key == Right)
+        move_player(game, 1, 0);
+    else if (key == A || key == Left)
+        move_player(game, -1, 0);
+    else if (key == W || key == Up)
+        move_player(game, 0, -1);
+    else if (key == S || key == Down)
+        move_player(game, 0, 1);
+    return (0);
 }
 
 
-
+int render_next_frame(t_game *game)
+{
+    draw_map(game);
+    return (0);
+}
 int main(int argc, char **argv)
 {
     t_map *map;
-    t_img img;
-	t_win win;
+    t_game *game;
+    if (map_validation(&map, argc, argv))
+    {
+        game = malloc(sizeof(t_game));
+        if (!game)
+        return (1);
+    
+    // Asignar memoria para img
+        game->img = malloc(sizeof(t_img));
+        if (!game->img)
+        {
+        free(game);
+        return (1);
+        }
+    
+    game->map = map;//asigno la direccion de memoria
+    game->mlx = mlx_init();
+    game->width = map->width;
+    game->height = map->height;
+    game->cont = 0;
+    game->win = mlx_new_window(game->mlx, game->width * 64, game->height * 64, "so_long");
+    game->collec = count_collectibles(game->map);
+	game->on_exit = 0;
+    upload_img(game);
 
-    map_validation(&map, argc, argv);
-    win.mlx = mlx_init();
-    win.width = map->width;
-    win.height = map->height;
-
-    win.win = mlx_new_window(win.mlx, win.width * 64, win.height * 64, "so_long");
-    upload_img(&img, &win);
-    draw_player(map,&win,&img);
-	draw_wall(map,&win, &img);
-	draw_collec(map,&win, &img);
-	draw_exit(map, &win, &img);
-	draw_path(map, &win, &img);
+	mlx_loop_hook(game->mlx, render_next_frame, game);
+	mlx_key_hook(game->win, mover_player, game);
+    
     // Manejar el cierre de la ventana
-    mlx_hook(win.win, 17, 0, close_window, &win);
-
+    mlx_hook(game->win, 17, 0, close_window, game);
+    
     // Iniciar el bucle principal
-    mlx_loop(win.mlx);
-    return (0);
-}
-
-/*// Función para manejar eventos de teclado
-int key_hook(int keycode, t_img *img)
-{
-    if (keycode == 100) // Tecla 'd' (mueve a la derecha)
-    {
-        img->pos.x += 1;
-        printf("Derecha\n");
+    mlx_loop(game->mlx);
     }
-    else if (keycode == 97) // Tecla 'a' (mueve a la izquierda)
-    {
-        img->pos.x -= 1;
-        printf("Izquierda\n");
-    }
-    else if (keycode == 119) // Tecla 'w' (mueve hacia arriba)
-    {
-        img->pos.y -= 1;
-        printf("Arriba\n");
-    }
-    else if (keycode == 115) // Tecla 's' (mueve hacia abajo)
-    {
-        img->pos.y += 1;
-        printf("Abajo\n");
-    }
-
-    return (0);
-}
-
-// Renderiza el siguiente frame
-int render_next_frame(t_img *img)
-{
-    // Limpiar la ventana
-    mlx_clear_window(img->mlx, img->win);
-
-    mlx_put_image_to_window(img->mlx, img->win, img->img, img->pos.x * 64, img->pos.y * 64);
-
-    return (0);
-}
-
-// Cierra la ventana y termina el programa
-int close_window(t_img *img)
-{
-    mlx_destroy_window(img->mlx, img->win);
-    exit(0);
-    return (0);
-}
-
-int main(int argc, char **argv)
-{
-    t_img img;
-    t_map *map;
-    int win_ancho;
-    int win_alto;
-    
-
-    map_validation(&map, argc, argv);
     
     
-    // Inicializar MiniLibX
-    img.mlx = mlx_init();
-    if (!img.mlx)
-        return (1);
-    win_ancho = ft_strlen(map -> map[0]) * 64;
-    win_alto = map->count * 64;
-    printf("altura de la ventana: %d\n", win_alto);
-    printf("anchura de la ventana: %d\n", win_ancho);
-    // Crear una ventana
-    img.win = mlx_new_window(img.mlx, win_ancho, win_alto, "so_long");
-    if (!img.win)
-        return (1);
-
-    // Cargar la imagen XPM
-    img.img = mlx_xpm_file_to_image(img.mlx, "pirata.xpm", &img.img_width, &img.img_height);
-    if (!img.img)
-    {
-        printf("Error: No se pudo cargar la imagen\n");
-        return (1);
-    }
-    printf("Ancho de la imagen: %d\n", img.img_width);
-    printf("Altura de la imagen: %d\n", img.img_height);
-
-    // Posición inicial de la imagen
-    img.pos = search_player(map);  // Asegúrate de definir search_player
-	printf("posicion inicial: x: %d, y :%d\n", img.pos.x,img.pos.y);
-
-
-    mlx_loop_hook(img.mlx, render_next_frame, &img);
-
-    // Registrar la función de teclado
-    mlx_key_hook(img.win, key_hook, &img);
-
-    // Manejar el cierre de la ventana
-    mlx_hook(img.win, 17, 0, close_window, &img);
-
-    // Iniciar el bucle principal
-    mlx_loop(img.mlx);
- 
     return (0);
 }
-*/
+
+

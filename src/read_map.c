@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yuliano <yuliano@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ypacileo <ypacileo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 11:40:01 by ypacileo          #+#    #+#             */
-/*   Updated: 2025/03/20 21:50:24 by yuliano          ###   ########.fr       */
+/*   Updated: 2025/03/22 19:24:34 by ypacileo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	file_extension(char *s)
 	if (!s)
 		return (0);
 	len = ft_strlen(s);
-	if (len < 4)
+	if (len <= 8)
 		return (0);
 	if (s[len - 4] == '.' && s[len - 3] == 'b'
 		&& s[len - 2] == 'e' && s[len - 1] == 'r')

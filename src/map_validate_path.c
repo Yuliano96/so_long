@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_validate_path.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yuliano <yuliano@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ypacileo <ypacileo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 06:51:27 by yuliano           #+#    #+#             */
-/*   Updated: 2025/03/20 21:41:35 by yuliano          ###   ########.fr       */
+/*   Updated: 2025/03/22 19:52:20 by ypacileo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,35 +46,6 @@ t_point	extraer_cola(t_queue *q)
 	return (q->points[q->frente++]);
 }
 
-/*
-//visito los vecinos
-void	neighbors_bfs(t_queue *q, t_point pto, t_map *map, t_data *dat)
-{
-	int		dir[4][2];
-	int		i;
-	t_point	pos;
-	int		width;
-
-	init_directions(dir);
-	width = strlen(map->map[0]);
-	i = 0;
-	while (i < 4)
-	{
-		pos.x = pto.x + dir[i][0];
-		pos.y = pto.y + dir[i][1];
-		if (pos.x >= 0 && pos.y >= 0 && pos.x < width && pos.y < map->count
-			&& dat->copy[pos.y][pos.x] != '1' && dat->copy[pos.y][pos.x] != 'V')
-		{
-			if (map->map[pos.y][pos.x] == 'C')
-				dat->colec++;
-			if (map->map[pos.y][pos.x] == 'E')
-				dat->exit = 1;
-			anadir_cola(q, pos);
-			dat->copy[pos.y][pos.x] = 'V';
-		}
-		i++;
-	}
-}*/
 
 //visito los vecinos
 void	neighbors_bfs(t_queue *q, t_point pto, t_map *map, t_data *dat)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_validation.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yuliano <yuliano@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ypacileo <ypacileo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 15:56:55 by yuliano           #+#    #+#             */
-/*   Updated: 2025/03/20 21:41:48 by yuliano          ###   ########.fr       */
+/*   Updated: 2025/03/22 17:02:39 by ypacileo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	collectible_validation(t_map *map, char c)
 	return (0);
 }
 
-void	map_validation(t_map **map, int argc, char **argv)
+int	map_validation(t_map **map, int argc, char **argv)
 {
 	if (argc != 2)
 		ft_error("Error\nUso: ./so_long <mapa.ber>\n");
@@ -81,4 +81,5 @@ void	map_validation(t_map **map, int argc, char **argv)
 		map_error(map, "Error\nEl mapa debe tener al menos un coleccionable\n");
 	if (validate_path_bfs(*map, obj_posit(*map,'P')) == 0)
 		map_error(map, "Error\nRuta no valida");
+	return (1);
 }

@@ -3,18 +3,18 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: yuliano <yuliano@student.42.fr>            +#+  +:+       +#+         #
+#    By: ypacileo <ypacileo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/11 05:32:19 by yuliano           #+#    #+#              #
-#    Updated: 2025/03/16 13:16:25 by yuliano          ###   ########.fr        #
+#    Updated: 2025/03/22 16:36:19 by ypacileo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = so_long
 OBJ_DIR = ./obj
 SRC_DIR = ./src
-CFLAGS = -Wall -Wextra -Werror -I./libft -I./ -I./minilibx-linux
-LIBS = libft/libft.a ./minilibx-linux/libmlx.a -lX11 -lXext -lm
+CFLAGS = -Wall -Wextra -Werror -I./libft -I./ -I./mlx
+LIBS = libft/libft.a ./mlx/libmlx.a -lX11 -lXext -lm
 
 OBJS = $(OBJ_DIR)/main.o \
        $(OBJ_DIR)/error.o \
@@ -23,14 +23,15 @@ OBJS = $(OBJ_DIR)/main.o \
        $(OBJ_DIR)/read_map.o \
        $(OBJ_DIR)/utils.o \
        $(OBJ_DIR)/util2.o \
-       $(OBJ_DIR)/util3.o
+       $(OBJ_DIR)/util3.o \
+	   $(OBJ_DIR)/draw_map.o
 
 all: libs $(NAME)
 	
 # Compila o recompila la libft
 libs:
 	@make -C libft
-	@make -C minilibx-linux
+	@make -C mlx
 
 # Compila el programa principal
 $(NAME): $(OBJS)
@@ -45,7 +46,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 # Limpieza de archivos objeto
 clean:
 	@make clean -C libft
-	@make clean -C minilibx-linux
+	@make clean -C mlx
 	rm -fr $(OBJ_DIR)
 
 # Limpieza total (incluye libft.a y el ejecutable)

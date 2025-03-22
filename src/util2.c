@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   util2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yuliano <yuliano@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ypacileo <ypacileo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 17:05:45 by ypacileo          #+#    #+#             */
-/*   Updated: 2025/03/20 22:05:11 by yuliano          ###   ########.fr       */
+/*   Updated: 2025/03/22 14:21:04 by ypacileo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,28 +70,28 @@ char	*init_map_row(char *source, int width)
 }
 
 //genera una copia del mapa
-char	**map_visi(t_map *map)
+char	**map_copy(t_map *map)
 {
-	char	**map_visited;
+	char	**map_copy;
 	int		i;
 	
 
-	map_visited = (char **)malloc(sizeof(char *) * map->height);
-	if (!map_visited)
+	map_copy = (char **)malloc(sizeof(char *) * map->height);
+	if (!map_copy)
 		return (NULL);
 	
 	i = 0;
 	while (i < map->height)
 	{
-		map_visited[i] = init_map_row(map->map[i], map->width);
-		if (!map_visited[i])
+		map_copy[i] = init_map_row(map->map[i], map->width);
+		if (!map_copy[i])
 		{
-			ft_free_copy_map(map_visited, i - 1);
+			ft_free_copy_map(map_copy, i - 1);
 			return (NULL);
 		}
 		i++;
 	}
-	return (map_visited);
+	return (map_copy);
 }
 
 //inicia los datos para el bfs
@@ -102,7 +102,7 @@ int	init_bfs(t_queue **q, t_data *data, t_map *map, t_point posi)
 	*q = init_cola(map->width * map->height);
 	if (!(*q))
 		return (0);
-	data->copy = map_visi(map);
+	data->copy = map_copy(map);
 	if (!data->copy)
 	{
 		if (*q)
