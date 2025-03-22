@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_validation.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ypacileo <ypacileo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yuliano <yuliano@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 15:56:55 by yuliano           #+#    #+#             */
-/*   Updated: 2025/03/15 18:09:56 by ypacileo         ###   ########.fr       */
+/*   Updated: 2025/03/20 21:41:48 by yuliano          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	character_validation(t_map *map, char c)
 
 	count = 0;
 	i = 0;
-	while (i < map->count)
+	while (i < map->height)
 	{
 		j = 0;
 		while (map->map[i][j] != '\0')
@@ -44,7 +44,7 @@ int	collectible_validation(t_map *map, char c)
 	int	j;
 
 	i = 0;
-	while (i < map->count)
+	while (i < map->height)
 	{
 		j = 0;
 		while (map->map[i][j] != '\0')
@@ -79,6 +79,6 @@ void	map_validation(t_map **map, int argc, char **argv)
 		map_error(map, "Error\nEl mapa debe tener una salida\n");
 	if (collectible_validation(*map, 'C') == 0)
 		map_error(map, "Error\nEl mapa debe tener al menos un coleccionable\n");
-	if (validate_path_bfs(*map, search_player(*map)) == 0)
+	if (validate_path_bfs(*map, obj_posit(*map,'P')) == 0)
 		map_error(map, "Error\nRuta no valida");
 }

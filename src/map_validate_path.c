@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_validate_path.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ypacileo <ypacileo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yuliano <yuliano@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 06:51:27 by yuliano           #+#    #+#             */
-/*   Updated: 2025/03/15 17:12:38 by ypacileo         ###   ########.fr       */
+/*   Updated: 2025/03/20 21:41:35 by yuliano          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ t_point	extraer_cola(t_queue *q)
 	return (q->points[q->frente++]);
 }
 
+/*
 //visito los vecinos
 void	neighbors_bfs(t_queue *q, t_point pto, t_map *map, t_data *dat)
 {
@@ -67,6 +68,33 @@ void	neighbors_bfs(t_queue *q, t_point pto, t_map *map, t_data *dat)
 			if (map->map[pos.y][pos.x] == 'C')
 				dat->colec++;
 			if (map->map[pos.y][pos.x] == 'E')
+				dat->exit = 1;
+			anadir_cola(q, pos);
+			dat->copy[pos.y][pos.x] = 'V';
+		}
+		i++;
+	}
+}*/
+
+//visito los vecinos
+void	neighbors_bfs(t_queue *q, t_point pto, t_map *map, t_data *dat)
+{
+	int		dir[4][2];
+	int		i;
+	t_point	pos;
+
+	init_directions(dir);
+	i = 0;
+	while (i < 4)
+	{
+		pos.x = pto.x + dir[i][0];
+		pos.y = pto.y + dir[i][1];
+		if (pos.x >= 0 && pos.y >= 0 && pos.x < map->width && pos.y < map->height
+			&& dat->copy[pos.y][pos.x] != '1' && dat->copy[pos.y][pos.x] != 'V')
+		{
+			if (dat->copy[pos.y][pos.x] == 'C')
+				dat->colec++;
+			if (dat->copy[pos.y][pos.x] == 'E')
 				dat->exit = 1;
 			anadir_cola(q, pos);
 			dat->copy[pos.y][pos.x] = 'V';
@@ -98,6 +126,6 @@ int	validate_path_bfs(t_map *map, t_point start_player)
 		}
 		neighbors_bfs(q, pto, map, &data);
 	}
-	liberar_bfs(&data.copy, &q, map->count);
+	liberar_bfs(&data.copy, &q, map->height);
 	return (valid);
 }

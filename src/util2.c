@@ -3,24 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   util2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ypacileo <ypacileo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yuliano <yuliano@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 17:05:45 by ypacileo          #+#    #+#             */
-/*   Updated: 2025/03/15 17:11:47 by ypacileo         ###   ########.fr       */
+/*   Updated: 2025/03/20 22:05:11 by yuliano          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
 // Liberar memoria de BFS
-void	liberar_bfs(char ***map_visited, t_queue **cola, int alto)
+void	liberar_bfs(char ***map_visited, t_queue **queu, int height)
 {
 	int	i;
 
 	if (*map_visited)
 	{
 		i = 0;
-		while (i < alto)
+		while (i < height)
 		{
 			if ((*map_visited)[i])
 				free((*map_visited)[i]);
@@ -29,12 +29,12 @@ void	liberar_bfs(char ***map_visited, t_queue **cola, int alto)
 		free(*map_visited);
 		*map_visited = NULL;
 	}
-	if (*cola)
+	if (*queu)
 	{
-		if ((*cola)->points)
-			free((*cola)->points);
-		free(*cola);
-		*cola = NULL;
+		if ((*queu)->points)
+			free((*queu)->points);
+		free(*queu);
+		*queu = NULL;
 	}
 }
 
@@ -52,10 +52,10 @@ void	init_directions(int dir[4][2])
 }
 
 // copia una fila del mapa
-char	*init_map_row(char *source, size_t width)
+char	*init_map_row(char *source, int width)
 {
 	char	*row;
-	size_t	j;
+	int		j;
 
 	row = (char *)malloc(sizeof(char) * (width));
 	if (!row)
@@ -74,16 +74,16 @@ char	**map_visi(t_map *map)
 {
 	char	**map_visited;
 	int		i;
-	size_t	width;
+	
 
-	map_visited = (char **)malloc(sizeof(char *) * map->count);
+	map_visited = (char **)malloc(sizeof(char *) * map->height);
 	if (!map_visited)
 		return (NULL);
-	width = ft_strlen(map->map[0]);
+	
 	i = 0;
-	while (i < map->count)
+	while (i < map->height)
 	{
-		map_visited[i] = init_map_row(map->map[i], width);
+		map_visited[i] = init_map_row(map->map[i], map->width);
 		if (!map_visited[i])
 		{
 			ft_free_copy_map(map_visited, i - 1);
@@ -99,7 +99,7 @@ int	init_bfs(t_queue **q, t_data *data, t_map *map, t_point posi)
 {
 	data->colec = 0;
 	data->exit = 0;
-	*q = init_cola(strlen(map->map[0]) * map->count);
+	*q = init_cola(map->width * map->height);
 	if (!(*q))
 		return (0);
 	data->copy = map_visi(map);

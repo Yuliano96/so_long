@@ -6,7 +6,7 @@
 /*   By: yuliano <yuliano@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 11:40:01 by ypacileo          #+#    #+#             */
-/*   Updated: 2025/03/11 20:30:03 by yuliano          ###   ########.fr       */
+/*   Updated: 2025/03/20 21:50:24 by yuliano          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	free_map(t_map **map)
 	if (!map || !(*map))
 		return ;
 	i = 0;
-	while (i < (*map)->count)
+	while (i < (*map)->height)
 	{
 		free((*map)->map[i]);
 		(*map)->map[i] = NULL;
@@ -58,11 +58,11 @@ void	read_map(t_map *map)
 	fd = open(map->name, O_RDONLY);
 	if (fd < 0)
 		ft_error("Error\nAl reabrir el archivo\n");
-	map->map = (char **)malloc(sizeof(char *) * (map->count + 1));
+	map->map = (char **)malloc(sizeof(char *) * (map->height + 1));
 	if (!map->map)
 		ft_error("Error\nFallo de asignación de memoria\n");
 	i = 0;
-	while (i < map->count)
+	while (i < map->height)
 	{
 		line = get_next_line(fd);
 		map->map[i] = line;
@@ -73,13 +73,14 @@ void	read_map(t_map *map)
 	close(fd);
 }
 
+//aqui tambien defino la anchura del mapa
 int	check_rectangle(t_map *map)
 {
-	size_t	len;
 	int	i;
 
 	if (!map || !map->map || !map->map[0])
 		return (0);
+
 	i = 0;
 	while (map -> map[i] != NULL)
 	{
@@ -87,11 +88,11 @@ int	check_rectangle(t_map *map)
 			map->map[i][ft_strlen(map->map[i]) - 1] = '\0';
 		i ++;
 	}
-	len = ft_strlen(map->map[0]);
+	map->width = (int)ft_strlen(map->map[0]);
 	i = 1;
 	while (map->map[i] != NULL)
 	{
-		if (ft_strlen(map->map[i]) != len)
+		if ((int)ft_strlen(map->map[i]) != map->width)
 			return (0);
 		i++;
 	}
@@ -101,16 +102,14 @@ int	check_rectangle(t_map *map)
 int	check_wall(t_map *map)
 {
 	int	i;
-	int	len;
 
-	len = ft_strlen(map -> map[0]);
-	if (check_wall_row(map, len) == 0)
+	if (check_wall_row(map) == 0)
 		return (0);
 	i = 1;
-	while (i < (map -> count - 1))
+	while (i < (map -> height - 1))
 	{
 		if (map -> map[i][0] != '1'
-			|| map -> map[i][len - 1] != '1')
+			|| map -> map[i][map->width - 1] != '1')
 			return (0);
 		i++;
 	}

@@ -3,36 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   util3.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ypacileo <ypacileo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yuliano <yuliano@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 17:17:45 by ypacileo          #+#    #+#             */
-/*   Updated: 2025/03/15 18:17:56 by ypacileo         ###   ########.fr       */
+/*   Updated: 2025/03/20 21:43:29 by yuliano          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-t_point	search_player(t_map *map)
+t_point	obj_posit(t_map *map, char c)
 {
-	t_point	player;
-	size_t	width;
-	int		height;
+	t_point	obj;
 
-	height = map->count;
-	width = ft_strlen(map->map[0]);
-	player.y = 0;
-	while (player.y < height)
+	obj.y = 0;
+	while (obj.y < map->height)
 	{
-		player.x = 0;
-		while (player.x < (int)width)
+		obj.x = 0;
+		while (obj.x < map->width)
 		{
-			if (map->map[player.y][player.x] == 'P')
-				return (player);
-			player.x++;
+			if (map->map[obj.y][obj.x] == c)
+				return (obj);
+			obj.x++;
 		}
-		player.y++;
+		obj.y++;
 	}
-	player.x = -1;
-	player.y = -1;
-	return (player);
+	obj.x = -1;
+	obj.y = -1;
+	return (obj);
 }
