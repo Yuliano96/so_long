@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   so_long.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ypacileo <ypacileo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yuliano <yuliano@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 06:05:32 by yuliano           #+#    #+#             */
-/*   Updated: 2025/03/22 20:51:44 by ypacileo         ###   ########.fr       */
+/*   Updated: 2025/03/27 07:52:55 by yuliano          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ typedef struct s_game
     int		cont;
 	int		collec;
 	int     on_exit;
+    int     move;
 } t_game;
 
 
@@ -95,23 +96,24 @@ void	free_trash(char *line, int fd);
 int    check_wall_row(t_map *map);
 void ft_error(const char *string);
 void	map_error(t_map **map,const char *msg);
-int	file_extension(char *s);
+int	file_extension(const char *str);
+int	validate_directory(const char *str);
 void	free_map(t_map **map);
 void	read_map(t_map *map);
 int	check_rectangle(t_map *map);
 int	check_wall(t_map *map);
 int	character_validation(t_map *map, char c);
 int	collectible_validation(t_map *map, char c);
-int map_validation(t_map **map, int argc, char **argv);
+void map_validation(t_map **map, int argc, char **argv);
 int	count_collectibles(t_map *map);
 void	ft_free_copy_map(char **map_visi, int i);
-void	liberar_bfs(char ***map_visited, t_queue **cola, int alto);
+void	free_bfs(char ***map_visited, t_queue **cola, int alto);
 void	init_directions(int dir[4][2]);
 char	*init_map_row(char *source, int width);
 char	**map_copy(t_map *map);
-t_queue	*init_cola(int size);
-void	anadir_cola(t_queue *q, t_point pos);
-t_point	extraer_cola(t_queue *q);
+t_queue	*init_queue(int size);
+void	add_queue(t_queue *q, t_point pos);
+t_point	extract_queue(t_queue *q);
 t_point	obj_posit(t_map *map, char c);
 int	init_bfs(t_queue **q, t_data *data, t_map *map, t_point posi);
 void	neighbors_bfs(t_queue *q, t_point pto, t_map *map, t_data *dat);
@@ -120,4 +122,8 @@ void upload_img(t_game *game);
 void draw_object(t_game *game, char obj_char, void *img);
 void draw_map(t_game *game);
 int close_window(t_game *game);
+void	init_game(t_game **game, t_map *map);
+void	move_player(t_game *game, int dx, int dy);
+int	mover_player(int key, t_game *game);
+int render_next_frame(t_game *game);
 #endif

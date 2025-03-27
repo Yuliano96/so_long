@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ypacileo <ypacileo@student.42.fr>          +#+  +:+       +#+         #
+#    By: yuliano <yuliano@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/11 05:32:19 by yuliano           #+#    #+#              #
-#    Updated: 2025/03/22 16:36:19 by ypacileo         ###   ########.fr        #
+#    Updated: 2025/03/27 06:31:56 by yuliano          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,8 @@ OBJS = $(OBJ_DIR)/main.o \
        $(OBJ_DIR)/utils.o \
        $(OBJ_DIR)/util2.o \
        $(OBJ_DIR)/util3.o \
-	   $(OBJ_DIR)/draw_map.o
+	   $(OBJ_DIR)/draw_map.o \
+	   $(OBJ_DIR)/mover_player.o
 
 all: libs $(NAME)
 	
