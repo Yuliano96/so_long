@@ -3,28 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   read_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ypacileo <ypacileo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yuliano <yuliano@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 11:40:01 by ypacileo          #+#    #+#             */
-/*   Updated: 2025/03/22 19:24:34 by ypacileo         ###   ########.fr       */
+/*   Updated: 2025/03/27 07:51:40 by yuliano          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int	file_extension(char *s)
+/*verifica que el archvo tenga la extension .ber*/
+int	file_extension(const char *str)
 {
-	int	len;
+	const char	*extension;
+	const char	*copy;
 
-	if (!s)
+	if (!str)
 		return (0);
-	len = ft_strlen(s);
-	if (len <= 8)
+	extension = ft_strrchr(str, '.');
+	if (!extension || extension == str || *(extension + 1) == '\0')
 		return (0);
-	if (s[len - 4] == '.' && s[len - 3] == 'b'
-		&& s[len - 2] == 'e' && s[len - 1] == 'r')
-		return (1);
-	return (0);
+	if (ft_strncmp(extension, ".ber", ft_strlen(extension)) != 0)
+		return (0);
+	if (validate_directory(str) > 0)
+	{
+		if ((extension - str) <= (validate_directory(str) + 1))
+			return (0);
+	}
+	copy = str;
+	while (copy < extension)
+	{
+		if (*copy == '.')
+			return (0);
+		copy++;
+	}
+	return (1);
 }
 
 void	free_map(t_map **map)
@@ -33,15 +46,16 @@ void	free_map(t_map **map)
 
 	if (!map || !(*map))
 		return ;
-	i = 0;
-	while (i < (*map)->height)
+	if ((*map)->map)
 	{
-		free((*map)->map[i]);
-		(*map)->map[i] = NULL;
-		i++;
+		i = 0;
+		while (i < (*map)->height)
+		{
+			free((*map)->map[i]);
+			i++;
+		}
+		free((*map)->map);
 	}
-	free((*map)->map);
-	(*map)->map = NULL;
 	free(*map);
 	*map = NULL;
 }
@@ -73,14 +87,13 @@ void	read_map(t_map *map)
 	close(fd);
 }
 
-//aqui tambien defino la anchura del mapa
+/*se define la anchura de mapa y se comprueba si el mapa es un rectangulo*/
 int	check_rectangle(t_map *map)
 {
 	int	i;
 
 	if (!map || !map->map || !map->map[0])
 		return (0);
-
 	i = 0;
 	while (map -> map[i] != NULL)
 	{

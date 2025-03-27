@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   map_validate_path.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ypacileo <ypacileo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yuliano <yuliano@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 06:51:27 by yuliano           #+#    #+#             */
-/*   Updated: 2025/03/22 19:52:20 by ypacileo         ###   ########.fr       */
+/*   Updated: 2025/03/27 07:00:08 by yuliano          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
 // Inicializa la cola
-t_queue	*init_cola(int size)
+t_queue	*init_queue(int size)
 {
 	t_queue	*q;
 
@@ -33,7 +33,7 @@ t_queue	*init_cola(int size)
 }
 
 // Añadir a la cola
-void	anadir_cola(t_queue *q, t_point pos)
+void	add_queue(t_queue *q, t_point pos)
 {
 	q->points[q->final].x = pos.x;
 	q->points[q->final].y = pos.y;
@@ -41,33 +41,34 @@ void	anadir_cola(t_queue *q, t_point pos)
 }
 
 // Extraer de la cola
-t_point	extraer_cola(t_queue *q)
+t_point	extract_queue(t_queue *q)
 {
 	return (q->points[q->frente++]);
 }
 
-
-//visito los vecinos
+//visito los vecinos del mapa
 void	neighbors_bfs(t_queue *q, t_point pto, t_map *map, t_data *dat)
 {
 	int		dir[4][2];
 	int		i;
 	t_point	pos;
+	int		width;
 
+	width = map->width;
 	init_directions(dir);
 	i = 0;
 	while (i < 4)
 	{
 		pos.x = pto.x + dir[i][0];
 		pos.y = pto.y + dir[i][1];
-		if (pos.x >= 0 && pos.y >= 0 && pos.x < map->width && pos.y < map->height
+		if (pos.x >= 0 && pos.y >= 0 && pos.x < width && pos.y < map->height
 			&& dat->copy[pos.y][pos.x] != '1' && dat->copy[pos.y][pos.x] != 'V')
 		{
 			if (dat->copy[pos.y][pos.x] == 'C')
 				dat->colec++;
 			if (dat->copy[pos.y][pos.x] == 'E')
 				dat->exit = 1;
-			anadir_cola(q, pos);
+			add_queue(q, pos);
 			dat->copy[pos.y][pos.x] = 'V';
 		}
 		i++;
@@ -89,7 +90,7 @@ int	validate_path_bfs(t_map *map, t_point start_player)
 	valid = 0;
 	while (q->frente < q->final)
 	{
-		pto = extraer_cola(q);
+		pto = extract_queue(q);
 		if (data.exit && data.colec == total_collectibl)
 		{
 			valid = 1;
@@ -97,6 +98,6 @@ int	validate_path_bfs(t_map *map, t_point start_player)
 		}
 		neighbors_bfs(q, pto, map, &data);
 	}
-	liberar_bfs(&data.copy, &q, map->height);
+	free_bfs(&data.copy, &q, map->height);
 	return (valid);
 }

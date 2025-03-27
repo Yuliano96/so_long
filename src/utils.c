@@ -6,7 +6,7 @@
 /*   By: yuliano <yuliano@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 13:42:11 by yuliano           #+#    #+#             */
-/*   Updated: 2025/03/20 21:19:24 by yuliano          ###   ########.fr       */
+/*   Updated: 2025/03/27 21:30:35 by yuliano          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	counter_row(t_map *map, char *line, int fd)
 	{
 		free(map);
 		ft_error("Error\nAl abrir el archivo");
-	}		
+	}
 	map -> height = 0;
 	line = get_next_line(fd);
 	while (line != NULL)
@@ -84,6 +84,7 @@ int	count_collectibles(t_map *map)
 	}
 	return (count);
 }
+
 // Función para liberar mao_visit
 void	ft_free_copy_map(char **map_visi, int i)
 {

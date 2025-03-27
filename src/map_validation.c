@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   map_validation.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ypacileo <ypacileo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yuliano <yuliano@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 15:56:55 by yuliano           #+#    #+#             */
-/*   Updated: 2025/03/22 17:02:39 by ypacileo         ###   ########.fr       */
+/*   Updated: 2025/03/27 07:09:16 by yuliano          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
+/*valida que el mapa tenga una sola salida y un jugador*/
 int	character_validation(t_map *map, char c)
 {
 	int	i;
@@ -38,6 +39,7 @@ int	character_validation(t_map *map, char c)
 	return (count == 1);
 }
 
+/*verifica que el mapa tenga al menos un coleccionable*/
 int	collectible_validation(t_map *map, char c)
 {
 	int	i;
@@ -58,7 +60,7 @@ int	collectible_validation(t_map *map, char c)
 	return (0);
 }
 
-int	map_validation(t_map **map, int argc, char **argv)
+void	map_validation(t_map **map, int argc, char **argv)
 {
 	if (argc != 2)
 		ft_error("Error\nUso: ./so_long <mapa.ber>\n");
@@ -79,7 +81,6 @@ int	map_validation(t_map **map, int argc, char **argv)
 		map_error(map, "Error\nEl mapa debe tener una salida\n");
 	if (collectible_validation(*map, 'C') == 0)
 		map_error(map, "Error\nEl mapa debe tener al menos un coleccionable\n");
-	if (validate_path_bfs(*map, obj_posit(*map,'P')) == 0)
+	if (validate_path_bfs(*map, obj_posit(*map, 'P')) == 0)
 		map_error(map, "Error\nRuta no valida");
-	return (1);
 }

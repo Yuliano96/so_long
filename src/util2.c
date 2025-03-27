@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   util2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ypacileo <ypacileo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yuliano <yuliano@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 17:05:45 by ypacileo          #+#    #+#             */
-/*   Updated: 2025/03/22 14:21:04 by ypacileo         ###   ########.fr       */
+/*   Updated: 2025/03/27 21:27:52 by yuliano          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
 // Liberar memoria de BFS
-void	liberar_bfs(char ***map_visited, t_queue **queu, int height)
+void	free_bfs(char ***map_visited, t_queue **queu, int height)
 {
 	int	i;
 
@@ -74,12 +74,10 @@ char	**map_copy(t_map *map)
 {
 	char	**map_copy;
 	int		i;
-	
 
 	map_copy = (char **)malloc(sizeof(char *) * map->height);
 	if (!map_copy)
 		return (NULL);
-	
 	i = 0;
 	while (i < map->height)
 	{
@@ -99,7 +97,7 @@ int	init_bfs(t_queue **q, t_data *data, t_map *map, t_point posi)
 {
 	data->colec = 0;
 	data->exit = 0;
-	*q = init_cola(map->width * map->height);
+	*q = init_queue(map->width * map->height);
 	if (!(*q))
 		return (0);
 	data->copy = map_copy(map);
@@ -113,7 +111,7 @@ int	init_bfs(t_queue **q, t_data *data, t_map *map, t_point posi)
 		}
 		return (0);
 	}
-	anadir_cola(*q, posi);
+	add_queue(*q, posi);
 	data->copy[posi.y][posi.x] = 'V';
 	return (1);
 }

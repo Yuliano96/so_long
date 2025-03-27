@@ -6,7 +6,7 @@
 /*   By: yuliano <yuliano@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 17:17:45 by ypacileo          #+#    #+#             */
-/*   Updated: 2025/03/20 21:43:29 by yuliano          ###   ########.fr       */
+/*   Updated: 2025/03/27 21:29:25 by yuliano          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,4 +31,19 @@ t_point	obj_posit(t_map *map, char c)
 	obj.x = -1;
 	obj.y = -1;
 	return (obj);
+}
+
+int	validate_directory(const char *str)
+{
+	int	i;
+
+	if (!str)
+		return (0);
+	i = 0;
+	while (str[i] != '/' && str[i])
+		i++;
+	if (str[i] == '/')
+		return (i);
+	else
+		return (0);
 }
