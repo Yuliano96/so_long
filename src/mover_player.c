@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mover_player.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yuliano <yuliano@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ypacileo <ypacileo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 06:23:03 by yuliano           #+#    #+#             */
-/*   Updated: 2025/03/27 07:32:10 by yuliano          ###   ########.fr       */
+/*   Updated: 2025/03/29 12:39:50 by ypacileo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,19 +62,21 @@ void	move_player(t_game *game, int dx, int dy)
 		else
 			game->on_exit = 0;
 		game->map->map[player.y + dy][player.x + dx] = 'P';
-		printf("player move --> %d\n", game->move++);
+		ft_printf("player move --> %d\n", ++game->move);
 	}
 }
 
 int	mover_player(int key, t_game *game)
 {
-	if (key == D || key == Right)
+	if (key == ESC)
+		close_window(game);
+	if (key == D || key == RIGHT)
 		move_player(game, 1, 0);
-	else if (key == A || key == Left)
+	else if (key == A || key == LEFT)
 		move_player(game, -1, 0);
-	else if (key == W || key == Up)
+	else if (key == W || key == UP)
 		move_player(game, 0, -1);
-	else if (key == S || key == Down)
+	else if (key == S || key == DOWN)
 		move_player(game, 0, 1);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_validate_path.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yuliano <yuliano@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ypacileo <ypacileo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 06:51:27 by yuliano           #+#    #+#             */
-/*   Updated: 2025/03/27 07:00:08 by yuliano          ###   ########.fr       */
+/*   Updated: 2025/03/29 12:25:13 by ypacileo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ t_queue	*init_queue(int size)
 		free(q);
 		return (NULL);
 	}
-	q->frente = 0;
-	q->final = 0;
+	q->front = 0;
+	q->end = 0;
 	q->size = size;
 	return (q);
 }
@@ -35,15 +35,15 @@ t_queue	*init_queue(int size)
 // Añadir a la cola
 void	add_queue(t_queue *q, t_point pos)
 {
-	q->points[q->final].x = pos.x;
-	q->points[q->final].y = pos.y;
-	q->final++;
+	q->points[q->end].x = pos.x;
+	q->points[q->end].y = pos.y;
+	q->end++;
 }
 
 // Extraer de la cola
 t_point	extract_queue(t_queue *q)
 {
-	return (q->points[q->frente++]);
+	return (q->points[q->front++]);
 }
 
 //visito los vecinos del mapa
@@ -88,7 +88,7 @@ int	validate_path_bfs(t_map *map, t_point start_player)
 	if (!init_bfs(&q, &data, map, start_player))
 		return (0);
 	valid = 0;
-	while (q->frente < q->final)
+	while (q->front < q->end)
 	{
 		pto = extract_queue(q);
 		if (data.exit && data.colec == total_collectibl)

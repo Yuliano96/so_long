@@ -3,14 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   map_validation.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yuliano <yuliano@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ypacileo <ypacileo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 15:56:55 by yuliano           #+#    #+#             */
-/*   Updated: 2025/03/27 07:09:16 by yuliano          ###   ########.fr       */
+/*   Updated: 2025/03/29 12:49:26 by ypacileo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
+
+int	check_invalid_items(char s)
+{
+	if (s != '1' && s != '0' && s != 'E' && s != 'P' && s != 'C')
+		return (0);
+	return (1);
+}
+
+int	map_character(t_map *map)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < map->height)
+	{
+		j = 0;
+		while (j < map->width)
+		{
+			if (check_invalid_items(map->map[i][j]) == 0)
+				return (0);
+			j++;
+		}
+		i++;
+	}
+	return (1);
+}
 
 /*valida que el mapa tenga una sola salida y un jugador*/
 int	character_validation(t_map *map, char c)
@@ -73,6 +100,8 @@ void	map_validation(t_map **map, int argc, char **argv)
 	read_map(*map);
 	if (check_rectangle(*map) == 0)
 		map_error(map, "Error\nEl mapa no es un rectángulo\n");
+	if (map_character(*map) == 0)
+		map_error(map, "Error\nEl mapa tiene caracter(s), no valido\n");
 	if (check_wall(*map) == 0)
 		map_error(map, "Error\nEl mapa no está rodeado de muros\n");
 	if (character_validation(*map, 'P') == 0)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yuliano <yuliano@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ypacileo <ypacileo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 16:31:27 by ypacileo          #+#    #+#             */
-/*   Updated: 2025/03/27 06:20:37 by yuliano          ###   ########.fr       */
+/*   Updated: 2025/03/29 11:45:56 by ypacileo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	upload_img(t_game *game)
 	&game->img->width, &game->img->height);
 	if (!game->img->wall)
 		close_window(game);
-	game->img->path = mlx_xpm_file_to_image(game->mlx, "img/Fond.xpm", \
+	game->img->path = mlx_xpm_file_to_image(game->mlx, "img/path.xpm", \
 	&game->img->width, &game->img->height);
 	if (!game->img->path)
 		close_window(game);
